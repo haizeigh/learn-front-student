@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       loginForm: {
-        username: 'admin',
+        username: 'admin1',
         password: '123456'
       },
       // 表单验证
@@ -70,14 +70,19 @@ export default {
         if (!valid) return false
         // this.$http.post('login', this.loginForm): 返回值为promise
         // 返回值为promise，可加await简化操作 相应的也要加async
-        const { data: res } = await this.$http.post('login', this.loginForm)
-        // console.log(res)
-        if (res.meta.status !== 200) return this.$message.error('登录失败')
+        const { data: res } = await this.$http.post('user/login', {
+          name: this.loginForm.username,
+          pwd: this.loginForm.password,
+          role: 0
+        })
+        console.log(res)
+        if (res.code !== 200) return this.$message.error(res.message)
         this.$message.success('登录成功')
         // 1、将登陆成功之后的token, 保存到客户端的sessionStorage中; localStorage中是持久化的保存
         //   1.1 项目中出现了登录之外的其他API接口，必须在登陆之后才能访问
         //   1.2 token 只应在当前网站打开期间生效，所以将token保存在sessionStorage中
         window.sessionStorage.setItem('token', res.data.token)
+        window.sessionStorage.setItem('userId', res.data.userId)
         // 2、通过编程式导航跳转到后台主页, 路由地址为：/home
         this.$router.push('/home')
       })

@@ -4,7 +4,7 @@
     <el-header>
       <div>
         <img src="../assets/logo.png" alt />
-        <span>电商后台管理系统</span>
+        <span>在线学习系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
@@ -18,23 +18,44 @@
            <!-- :collapse-transition="false" -> 关闭动画 -->
            <!-- router -> 导航开启路由模式 -->
           <!-- 一级菜单  -->
-          <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id" >
+          <!-- <el-submenu :index="item.id+''" v-for="item in menuList" :key="item.id" > -->
             <!-- 一级菜单的模板区域 -->
-            <template slot="title">
-              <i :class="iconObj[item.id]"></i>
-              <span>{{ item.authName}}</span>
-            </template>
+            <!-- <template slot="title"> -->
+              <!-- <i :class="iconObj[item.id]"></i> -->
+              <!-- <span>{{ item.authName}}</span> -->
+            <!-- </template> -->
             <!-- 二级菜单 -->
-            <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
+            <!-- <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)"> -->
               <!-- 导航开启路由模式：
                 将index值作为导航路由 -->
               <!-- 二级菜单的模板区域 -->
+              <!-- <template slot="title"> -->
+                <!-- <i class="el-icon-menu"></i> -->
+                <!-- <span>{{ subItem.authName}}</span> -->
+              <!-- </template> -->
+            <!-- </el-menu-item> -->
+          <!-- </el-submenu> -->
+
+          <!-- 二级列表 -->
+          <el-menu-item index="/student/camp" @click="saveNavStatus('/student/camp')">
+            <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>已选课程列表</span>
+            </template>
+          </el-menu-item>
+          <el-menu-item index="/camp" @click="saveNavStatus('/camp')">
               <template slot="title">
-                <i class="el-icon-menu"></i>
-                <span>{{ subItem.authName}}</span>
+                  <i class="el-icon-location"></i>
+                  <span>全部课程列表</span>
               </template>
-            </el-menu-item>
-          </el-submenu>
+          </el-menu-item>
+          <el-menu-item index="/lesson" @click="saveNavStatus('/lesson')">
+            <template slot="title">
+                <i class="el-icon-reading"></i>
+                <span>章节列表</span>
+            </template>
+          </el-menu-item>
+
         </el-menu>
       </el-aside>
       <!-- 内容主体 -->
@@ -65,7 +86,7 @@ export default {
     }
   },
   created () {
-    this.getMenuList()
+    // this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {

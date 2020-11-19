@@ -36,6 +36,14 @@ const Add = () => import(/* webpackChunkName: "GoodsList_Add" */ '../components/
 const Order = () => import(/* webpackChunkName: "Order_Report" */ '../components/order/Order.vue')
 const Report = () => import(/* webpackChunkName: "Order_Report" */ '../components/report/Report.vue')
 
+const Camp = () => import(/* webpackChunkName: "Camp" */ '../components/camp/Camp.vue')
+const StudentCamp = () => import(/* webpackChunkName: "StudentCamp" */ '../components/camp/StudentCamp.vue')
+
+const Class = () => import(/* webpackChunkName: "Class" */ '../components/class/Class.vue')
+const Lesson = () => import(/* webpackChunkName: "Lesson" */ '../components/lesson/Lesson.vue')
+
+const Step = () => import(/* webpackChunkName: "Step" */ '../components/step/Step.vue')
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -54,7 +62,12 @@ const routes = [
       { path: '/goods', component: GoodsList },
       { path: '/goods/add', component: Add },
       { path: '/orders', component: Order },
-      { path: '/reports', component: Report }
+      { path: '/reports', component: Report },
+      { path: '/camp', component: Camp },
+      { path: '/class', component: Class },
+      { path: '/student/camp', component: StudentCamp },
+      { path: '/lesson', component: Lesson },
+      { path: '/step', component: Step }
     ] }
 
 ]
