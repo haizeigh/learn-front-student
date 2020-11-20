@@ -258,7 +258,7 @@ export default {
       const { data: res } = await this.$http.get('class/camp/' + this.$route.query.campId, {
         params: { pageSize: this.queryInfo.pagesize, pageNum: this.queryInfo.pagenum }
       })
-      console.log(res)
+      // console.log(res)
       if (res.code !== 200) {
         return this.$message.error('获取用户列表失败！')
       }
@@ -322,7 +322,6 @@ export default {
     // 把学生加入班级
     async addStudentToClass (id) {
       const { data: res } = await this.$http.post('student/class/' + id).catch(err => {
-        console.log(err)
         return err
       })
       if (res.code !== 200) {

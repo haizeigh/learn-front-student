@@ -75,7 +75,7 @@ export default {
           pwd: this.loginForm.password,
           role: 0
         })
-        console.log(res)
+        // console.log(res)
         if (res.code !== 200) return this.$message.error(res.message)
         this.$message.success('登录成功')
         // 1、将登陆成功之后的token, 保存到客户端的sessionStorage中; localStorage中是持久化的保存

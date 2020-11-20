@@ -277,7 +277,7 @@ export default {
           pageNum: this.queryInfo.pagenum,
           query: this.queryInfo.query }
       })
-      console.log(res)
+      // console.log(res)
       if (res.code !== 200) {
         return this.$message.error('获取用户列表失败！')
       }

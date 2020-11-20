@@ -202,7 +202,6 @@ export default {
           pageNum: this.queryInfo.pagenum,
           query: this.queryInfo.query }
       })
-      console.log(res)
       if (res.code !== 200) {
         return this.$message.error('获取学习内容失败！')
       }
@@ -211,13 +210,11 @@ export default {
     },
     // 监听 pagesize改变的事件
     handleSizeChange (newSize) {
-      // console.log(newSize)
       this.queryInfo.pagesize = newSize
       this.getStepList()
     },
     // 监听 页码值 改变事件
     handleCurrentChange (newSize) {
-      // console.log(newSize)
       this.queryInfo.pagenum = newSize
       this.getStepList()
     },
@@ -280,7 +277,6 @@ export default {
     },
     // 修改用户信息
     carouselChange () {
-      console.log('22')
     }
   }
 }
