@@ -14,10 +14,13 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import './assets/css/common.css'
 
 // 导入NProgress, 包对应的JS和CSS
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import vueMiniPlayer from 'vue-mini-player'
+import VideoPlayer from 'vue-video-player'
 
 import axios from 'axios'
 // 配置请求根路径
@@ -49,6 +52,12 @@ Vue.config.productionTip = false
 Vue.component('tree-table', TreeTable)
 // 全局注册富文本编辑器
 Vue.use(VueQuillEditor)
+// 使用播放器
+Vue.use(vueMiniPlayer)
+Vue.use(VideoPlayer)
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
+
 Vue.filter('dataFormat', function (originVal) {
   const dt = new Date(originVal)
 

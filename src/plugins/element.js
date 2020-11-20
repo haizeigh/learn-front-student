@@ -4,7 +4,7 @@ import { Button, Form, FormItem, Input, Message, Container, Header,
   BreadcrumbItem, Card, Row, Col, Table, TableColumn, Switch, Tooltip, Pagination,
   Dialog, MessageBox, Tag, Tree, Select, Option, Cascader, Alert, Tabs, TabPane,
   Step, Steps, Checkbox, CheckboxGroup, Upload,
-  Timeline, TimelineItem, Carousel, CarouselItem } from 'element-ui'
+  Timeline, TimelineItem, Carousel, CarouselItem, Radio, Link } from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Form)
@@ -49,3 +49,5 @@ Vue.use(Timeline)
 Vue.use(TimelineItem)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
+Vue.use(Radio)
+Vue.use(Link)

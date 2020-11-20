@@ -8,37 +8,65 @@
       <el-breadcrumb-item>学习内容</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图 -->
-    <el-card>
+    <el-card >
       <el-steps  finish-status="success">
         <el-step title="步骤 1"></el-step>
         <el-step title="步骤 2"></el-step>
         <el-step title="步骤 3"></el-step>
         <el-step title="步骤 4"></el-step>
       </el-steps>
-      <!-- <div > -->
-        <!-- <span class="demonstration" >Click 指示器触发</span> -->
-        <el-carousel trigger="click" arrow="always" :autoplay=false indicator-position="outside" :loop=false @change="carouselChange">
-          <el-carousel-item v-for="step in stepList" :key="step.id" :name="step.id" >
-            <!-- <h3 class="normal">{{ item }}</h3> -->
-                  <!-- 搜索 添加 -->
-            <el-row :gutter="20" v-if="step.stepType=='阅读题'">
-              <el-col :span="6">
-                <span>{{step.stepType}}</span>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="6">
-                <span>{{step.stepTitle}}</span>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="6">
-                <span>{{step.content}}</span>
-              </el-col>
-            </el-row>
-          </el-carousel-item>
-        </el-carousel>
-      <!-- </div> -->
+      <!-- <span class="demonstration" >Click 指示器触发</span> -->
+      <el-carousel trigger="click" arrow="always" :autoplay=false indicator-position="outside" :loop=false @change="carouselChange" height="400px">
+        <el-carousel-item v-for="step in stepList" :key="step.id" >
+          <!-- <div v-if="step.stepType ==='视频观看'">
+            <span>{{step.stepType}}</span>
+          </div> -->
+          <!-- 视频观看题目 -->
+          <video-player v-if="step.stepType ==='视频观看'"  class="video-player vjs-custom-skin" :playsinline="true" ref="videoPlayer" :options="playerOptions"></video-player>
+          <!-- 简答题目 -->
+          <el-form
+          ref="addUserFormRef"
+          label-width="100px"
+          v-if="step.stepType ==='简答'"
+          >
+            <el-form-item label="标题" prop="username">
+              <span>用户名</span>
+            </el-form-item>
+            <el-form-item label="回答" prop="username">
+              <el-input v-model="addUserForm.usernam" type="textarea" :autosize="{ minRows: 4, maxRows: 10}" style="width: 80%; height: 50%;"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary">提交</el-button>
+              <el-button >重置</el-button>
+            </el-form-item>
+          </el-form>
+          <!-- 单选题目 -->
+          <el-form
+          label-width="100px"
+          v-if="step.stepType ==='单选'"
+          >
+            <el-form-item label="标题" prop="username">
+              <span>用户名</span>
+            </el-form-item>
+            <el-form-item label="特殊资源">
+              <el-radio-group >
+                <el-radio label="线上品牌商赞助"></el-radio>
+                <el-radio label="线下场地免费"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary">提交</el-button>
+              <el-button >重置</el-button>
+            </el-form-item>
+        </el-form>
+        <!-- 阅读题 -->
+        </el-carousel-item>
+      </el-carousel>
+      <!-- <a href="../../assets/pdf/机器学习.pdf"></a> -->
+      <!-- <el-link href="../../assets/pdf/机器学习.pdf" >22</el-link> -->
+      <!-- <el-link href="https://element.eleme.io" target="_blank">默认链接</el-link> -->
+      <!-- <pdf src="../../assets/pdf/机器学习.pdf"></pdf> -->
+      <!-- <iframe src="../../assets/pdf/机器学习.pdf" id='iframebox' ref='pdfiframe' frameborder="0" scrolling="no"></iframe> -->
     </el-card>
   </div>
 </template>
@@ -134,7 +162,34 @@ export default {
       // 所有角色数据列表
       rolesLsit: [],
       // 已选中的角色Id值
-      selectRoleId: ''
+      selectRoleId: '',
+      video: {
+        url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
+        cover: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png',
+        muted: false,
+        loop: false,
+        preload: 'auto',
+        poster: '',
+        volume: 1,
+        autoplay: false
+      },
+      playerOptions: {
+        playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
+        autoplay: false, // 如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: 'zh-CN',
+        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [{
+          type: 'video/mp4', // 这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
+          src: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4' // url地址
+        }],
+        // poster: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png', // 你的封面地址
+        width: document.documentElement.clientWidth, // 播放器宽度
+        notSupportedMessage: '此视频暂无法播放，请稍后再试'// 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+      }
     }
   },
   created () {
@@ -224,100 +279,6 @@ export default {
       this.$refs.editUserFormRef.resetFields()
     },
     // 修改用户信息
-    editUser () {
-      // 提交请求前，表单预验证
-      this.$refs.editUserFormRef.validate(async valid => {
-        // console.log(valid)
-        // 表单预校验失败
-        if (!valid) return
-        const { data: res } = await this.$http.put(
-          'users/' + this.editUserForm.id,
-          {
-            email: this.editUserForm.email,
-            mobile: this.editUserForm.mobile
-          }
-        )
-        if (res.meta.status !== 200) {
-          this.$message.error('更新用户信息失败！')
-        }
-        // 隐藏添加用户对话框
-        this.editDialogVisible = false
-        this.$message.success('更新用户信息成功！')
-        this.getStepList()
-      })
-    },
-    // 删除用户
-    async removeUserById (id) {
-      const confirmResult = await this.$confirm(
-        '此操作将永久删除该用户, 是否继续?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).catch(err => err)
-      // 点击确定 返回值为：confirm
-      // 点击取消 返回值为： cancel
-      if (confirmResult !== 'confirm') {
-        return this.$message.info('已取消删除')
-      }
-      const { data: res } = await this.$http.delete('users/' + id)
-      if (res.meta.status !== 200) return this.$message.error('删除用户失败！')
-      this.$message.success('删除用户成功！')
-      this.getStepList()
-    },
-
-    // 删除用户所选的课程
-    async removeStudentFromCampById (id) {
-      const confirmResult = await this.$confirm(
-        '确定退课吗?',
-        '提示',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).catch(err => err)
-      // 点击确定 返回值为：confirm
-      // 点击取消 返回值为： cancel
-      if (confirmResult !== 'confirm') {
-        return this.$message.info('已取消退课')
-      }
-      const { data: res } = await this.$http.delete('student/camp/' + id)
-      if (res.code !== 200) return this.$message.error('退课失败！')
-      this.$message.success('退课成功！')
-      this.getStepList()
-    },
-    // 展示分配角色的对话框
-    async showSetRole (role) {
-      this.userInfo = role
-      // 展示对话框之前，获取所有角色列表
-      const { data: res } = await this.$http.get('roles')
-      if (res.meta.status !== 200) {
-        return this.$message.error('获取角色列表失败！')
-      }
-      this.rolesLsit = res.data
-      this.setRoleDialogVisible = true
-    },
-    // 分配角色
-    async saveRoleInfo () {
-      if (!this.selectRoleId) {
-        return this.$message.error('请选择要分配的角色')
-      }
-      const { data: res } = await this.$http.put(`users/${this.userInfo.id}/role`, { rid: this.selectRoleId })
-      if (res.meta.status !== 200) {
-        return this.$message.error('更新用户角色失败！')
-      }
-      this.$message.success('更新角色成功！')
-      this.getStepList()
-      this.setRoleDialogVisible = false
-    },
-    // 分配角色对话框关闭事件
-    setRoleDialogClosed () {
-      this.selectRoleId = ''
-      this.userInfo = {}
-    },
     carouselChange () {
       console.log('22')
     }
@@ -330,16 +291,29 @@ export default {
     color: #475669;
     font-size: 14px;
     opacity: 0.75;
-    /* line-height: 150px; */
+    line-height: 250px;
     margin: 0;
   }
   .el-carousel__item:nth-child(2n) {
-     background-color: #6b84a7;
+     background-color: #898e94;
   }
   .el-carousel__item:nth-child(2n+1) {
-     background-color: #9ab2ca;
+     background-color: #c3d7ec;
   }
   .demonstration{
     padding-bottom: 20px;
+  }
+  .video-js .vjs-icon-placeholder {
+    width: 80%;
+    height: 80%;
+    display: block;
+  }
+  .video-player {
+    width: 60%;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-bottom: 20px;
   }
 </style>
