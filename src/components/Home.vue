@@ -49,10 +49,10 @@
                   <span>全部课程列表</span>
               </template>
           </el-menu-item>
-          <el-menu-item index="/lesson" @click="saveNavStatus('/lesson')">
+          <el-menu-item index="/lessonAll" @click="saveNavStatus('/lesson')">
             <template slot="title">
                 <i class="el-icon-reading"></i>
-                <span>章节列表</span>
+                <span>全部章节列表</span>
             </template>
           </el-menu-item>
 

@@ -9,18 +9,16 @@
     </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card >
-      <el-steps  finish-status="success">
-        <el-step title="步骤 1"></el-step>
-        <el-step title="步骤 2"></el-step>
-        <el-step title="步骤 3"></el-step>
-        <el-step title="步骤 4"></el-step>
+      <el-steps finish-status="success">
+        <el-step v-for="step in stepList" :title="step.stepType" :key="step.id"></el-step>
       </el-steps>
       <!-- <span class="demonstration" >Click 指示器触发</span> -->
-      <el-carousel trigger="click" arrow="always" :autoplay=false indicator-position="outside" :loop=false @change="carouselChange" height="400px">
+      <el-carousel trigger="click" arrow="always" :autoplay=false :indicator-position="outside" :loop=false @change="carouselChange" height="400px">
         <el-carousel-item v-for="step in stepList" :key="step.id" >
-          <!-- <div v-if="step.stepType ==='视频观看'">
-            <span>{{step.stepType}}</span>
+          <!-- <div>
+            <span>请完成: {{step.stepTitle}}</span>
           </div> -->
+          <!-- <span >请完成：{{step.stepType}}</span> -->
           <!-- 视频观看题目 -->
           <video-player v-if="step.stepType ==='视频观看'"  class="video-player vjs-custom-skin" :playsinline="true" ref="videoPlayer" :options="playerOptions"></video-player>
           <!-- 简答题目 -->
@@ -30,7 +28,7 @@
           v-if="step.stepType ==='简答'"
           >
             <el-form-item label="标题" prop="username">
-              <span>用户名</span>
+              <span>你知道的历史上的著名人物</span>
             </el-form-item>
             <el-form-item label="回答" prop="username">
               <el-input v-model="addUserForm.usernam" type="textarea" :autosize="{ minRows: 4, maxRows: 10}" style="width: 80%; height: 50%;"></el-input>
@@ -46,12 +44,12 @@
           v-if="step.stepType ==='单选'"
           >
             <el-form-item label="标题" prop="username">
-              <span>用户名</span>
+              <span>明天是否会下雨</span>
             </el-form-item>
-            <el-form-item label="特殊资源">
-              <el-radio-group >
-                <el-radio label="线上品牌商赞助"></el-radio>
-                <el-radio label="线下场地免费"></el-radio>
+            <el-form-item label="请选择">
+              <el-radio-group v-model="form.resource">
+                <el-radio label="1">会</el-radio>
+                <el-radio label="2">不会</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>
@@ -189,6 +187,17 @@ export default {
         // poster: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png', // 你的封面地址
         width: document.documentElement.clientWidth, // 播放器宽度
         notSupportedMessage: '此视频暂无法播放，请稍后再试'// 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+      },
+      radio: '1',
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
       }
     }
   },

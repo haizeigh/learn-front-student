@@ -43,6 +43,7 @@ const Class = () => import(/* webpackChunkName: "Class" */ '../components/class/
 const Lesson = () => import(/* webpackChunkName: "Lesson" */ '../components/lesson/Lesson.vue')
 
 const Step = () => import(/* webpackChunkName: "Step" */ '../components/step/Step.vue')
+const LessonAll = () => import(/* webpackChunkName: "LessonAll" */ '../components/lesson/LessonAll.vue')
 
 Vue.use(VueRouter)
 
@@ -67,7 +68,8 @@ const routes = [
       { path: '/class', component: Class },
       { path: '/student/camp', component: StudentCamp },
       { path: '/lesson', component: Lesson },
-      { path: '/step', component: Step }
+      { path: '/step', component: Step },
+      { path: '/lessonAll', component: LessonAll }
     ] }
 
 ]
