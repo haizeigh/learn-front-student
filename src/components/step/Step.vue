@@ -14,47 +14,56 @@
       </el-steps>
       <!-- <span class="demonstration" >Click 指示器触发</span> -->
       <el-carousel trigger="click" arrow="always" :autoplay=false :indicator-position="outside" :loop=false @change="carouselChange" height="400px">
-        <el-carousel-item v-for="step in stepList" :key="step.id" >
+        <el-carousel-item v-for="(step,index) in stepList" :key="index" >
           <!-- <div>
             <span>请完成: {{step.stepTitle}}</span>
           </div> -->
           <!-- <span >请完成：{{step.stepType}}</span> -->
           <!-- 视频观看题目 -->
-          <video-player v-if="step.stepType ==='视频观看'"  class="video-player vjs-custom-skin" :playsinline="true" ref="videoPlayer" :options="playerOptions"></video-player>
+          <video-player v-if="step.stepType ==='视频观看'"  class="video-player vjs-custom-skin" :playsinline="true" ref="videoPlayer" :options="step.contentObject"></video-player>
           <!-- 简答题目 -->
           <el-form
-          ref="addUserFormRef"
+          ref="simpleAnswerFormRef"
           label-width="100px"
           v-if="step.stepType ==='简答'"
+          :data="step.contentObject"
           >
-            <el-form-item label="标题" prop="username">
-              <span>你知道的历史上的著名人物</span>
+            <el-form-item label="标题" >
+              <span>{{step.contentObject.title}}</span>
             </el-form-item>
-            <el-form-item label="回答" prop="username">
-              <el-input v-model="addUserForm.usernam" type="textarea" :autosize="{ minRows: 4, maxRows: 10}" style="width: 80%; height: 50%;"></el-input>
+            <el-form-item label="回答" prop="answerFromStudent">
+              <el-input v-model="step.contentObject.answerFromStudent" type="textarea" :autosize="{ minRows: 4, maxRows: 10}" style="width: 80%; height: 50%;">{{step.contentObject.answerFromStudent}}</el-input>
+            </el-form-item>
+            <el-form-item label="参考答案" >
+              <span>{{step.contentObject.answerFromTeacher}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary">提交</el-button>
-              <el-button >重置</el-button>
+              <!-- <el-button >重置</el-button> -->
             </el-form-item>
           </el-form>
           <!-- 单选题目 -->
           <el-form
           label-width="100px"
           v-if="step.stepType ==='单选'"
+          :data="step.contentObject"
+          ref="simpleSelectFormRef"
           >
-            <el-form-item label="标题" prop="username">
-              <span>明天是否会下雨</span>
+            <el-form-item label="标题" >
+              <span>{{step.contentObject.title}}</span>
             </el-form-item>
             <el-form-item label="请选择">
-              <el-radio-group v-model="form.resource">
-                <el-radio label="1">会</el-radio>
-                <el-radio label="2">不会</el-radio>
+              <el-radio-group v-model="step.contentObject.selected">
+                <el-radio v-for="select in step.contentObject.selectList" :label="select" :key="select">{{select}}</el-radio>
+                <!-- <el-radio label="2">不会</el-radio> -->
               </el-radio-group>
+            </el-form-item>
+            <el-form-item label="参考答案" >
+              <span>{{step.contentObject.answerFromTeacher}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary">提交</el-button>
-              <el-button >重置</el-button>
+              <!-- <el-button >重置</el-button> -->
             </el-form-item>
         </el-form>
         <!-- 阅读题 -->
@@ -161,18 +170,8 @@ export default {
       rolesLsit: [],
       // 已选中的角色Id值
       selectRoleId: '',
-      video: {
-        url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
-        cover: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png',
-        muted: false,
-        loop: false,
-        preload: 'auto',
-        poster: '',
-        volume: 1,
-        autoplay: false
-      },
       playerOptions: {
-        playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
+        // playbackRates: [0.7, 1.0, 1.5, 2.0], // 播放速度
         autoplay: false, // 如果true,浏览器准备好时开始回放。
         muted: false, // 默认情况下将会消除任何音频。
         loop: false, // 导致视频一结束就重新开始。
@@ -185,19 +184,19 @@ export default {
           src: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4' // url地址
         }],
         // poster: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png', // 你的封面地址
-        width: document.documentElement.clientWidth, // 播放器宽度
+        // width: document.documentElement.clientWidth, // 播放器宽度
         notSupportedMessage: '此视频暂无法播放，请稍后再试'// 允许覆盖Video.js无法播放媒体源时显示的默认信息。
       },
-      radio: '1',
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+      simpleAnswerForm: {
+        title: '下雨吗',
+        answerFromStudent: '',
+        answerFromTeacher: '不会的'
+      },
+      simpleSelectForm: {
+        title: '下雨吗',
+        selected: '',
+        selectList: ['会', '不知道', '不会'],
+        answerFromTeacher: '不会'
       }
     }
   },
@@ -208,14 +207,25 @@ export default {
     async getStepList () {
       const { data: res } = await this.$http.get('step/lesson/' + this.$route.query.lessonId, {
         params: { pageSize: this.queryInfo.pagesize,
-          pageNum: this.queryInfo.pagenum,
-          query: this.queryInfo.query }
+          pageNum: 1,
+          query: 100 }
       })
       if (res.code !== 200) {
         return this.$message.error('获取学习内容失败！')
       }
+      // console.log(res)
       this.stepList = res.data.content
       this.totle = res.data.totalCount
+
+      this.stepList.filter((item, i) => {
+        // console.log(tem.content)
+        // console.log(i)
+        // this.carouselData[i] = JSON.parse(item.content)
+        this.carouselData[i] = JSON.parse(item.content)
+      })
+      console.log(JSON.stringify(this.playerOptions))
+      console.log(this.playerOptions)
+      console.log(this.stepList[0].contentObject)
     },
     // 监听 pagesize改变的事件
     handleSizeChange (newSize) {
@@ -300,7 +310,7 @@ export default {
     margin: 0;
   }
   .el-carousel__item:nth-child(2n) {
-     background-color: #898e94;
+     background-color: #bec0c2;
   }
   .el-carousel__item:nth-child(2n+1) {
      background-color: #c3d7ec;
