@@ -15,12 +15,8 @@
       <!-- <span class="demonstration" >Click 指示器触发</span> -->
       <el-carousel trigger="click" arrow="always" :autoplay=false :indicator-position="outside" :loop=false @change="carouselChange" height="400px">
         <el-carousel-item v-for="(step,index) in stepList" :key="index" >
-          <!-- <div>
-            <span>请完成: {{step.stepTitle}}</span>
-          </div> -->
-          <!-- <span >请完成：{{step.stepType}}</span> -->
           <!-- 视频观看题目 -->
-          <video-player v-if="step.stepType ==='视频观看'"  class="video-player vjs-custom-skin" :playsinline="true" ref="videoPlayer" :options="step.contentObject"></video-player>
+          <video-player v-if="step.stepType ==='视频观看'"  class="video-player vjs-custom-skin" :playsinline="true" ref="videoPlayer" :options="step.contentObject" @ended="submitData(step)"></video-player>
           <!-- 简答题目 -->
           <el-form
           ref="simpleAnswerFormRef"
@@ -38,7 +34,7 @@
               <span>{{step.contentObject.answerFromTeacher}}</span>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary">提交</el-button>
+              <el-button type="primary" @click="submitData(step)">提交</el-button>
               <!-- <el-button >重置</el-button> -->
             </el-form-item>
           </el-form>
@@ -53,7 +49,7 @@
               <span>{{step.contentObject.title}}</span>
             </el-form-item>
             <el-form-item label="请选择">
-              <el-radio-group v-model="step.contentObject.selected">
+              <el-radio-group v-model="step.contentObject.answerFromStudent">
                 <el-radio v-for="select in step.contentObject.selectList" :label="select" :key="select">{{select}}</el-radio>
                 <!-- <el-radio label="2">不会</el-radio> -->
               </el-radio-group>
@@ -62,7 +58,7 @@
               <span>{{step.contentObject.answerFromTeacher}}</span>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary">提交</el-button>
+              <el-button type="primary" @click="submitData(step)">提交</el-button>
               <!-- <el-button >重置</el-button> -->
             </el-form-item>
         </el-form>
@@ -197,13 +193,33 @@ export default {
         selected: '',
         selectList: ['会', '不知道', '不会'],
         answerFromTeacher: '不会'
-      }
+      },
+      outside: 'outside'
     }
   },
   created () {
     this.getStepList()
   },
   methods: {
+    async submitData (step) {
+      // console.log(step)
+      // console.log(step.contentObject.answerFromStudent)
+      const { data: res } = await this.$http.post('report/step', {
+        campRef: step.campRef,
+        lessonId: step.lessonId,
+        id: step.id,
+        stepType: step.stepType,
+        content: step.content,
+        answerFromStudent: step.contentObject.answerFromStudent
+      })
+      if (res.code !== 200) return this.$message.error(res.message)
+      console.log(res)
+      if (res.data.diamondCount) {
+        this.$message.success('提交成功, 获得' + res.data.diamondCount + '颗钻石💎奖励')
+      } else {
+        this.$message.success('提交成功')
+      }
+    },
     async getStepList () {
       const { data: res } = await this.$http.get('step/lesson/' + this.$route.query.lessonId, {
         params: { pageSize: this.queryInfo.pagesize,
@@ -217,15 +233,15 @@ export default {
       this.stepList = res.data.content
       this.totle = res.data.totalCount
 
-      this.stepList.filter((item, i) => {
-        // console.log(tem.content)
-        // console.log(i)
-        // this.carouselData[i] = JSON.parse(item.content)
-        this.carouselData[i] = JSON.parse(item.content)
-      })
-      console.log(JSON.stringify(this.playerOptions))
-      console.log(this.playerOptions)
-      console.log(this.stepList[0].contentObject)
+      // this.stepList.filter((item, i) => {
+      // console.log(tem.content)
+      // console.log(i)
+      // this.carouselData[i] = JSON.parse(item.content)
+      // this.carouselData[i] = JSON.parse(item.content)
+      // })
+      // console.log(JSON.stringify(this.stepList[1].contentObject))
+      // console.log(this.playerOptions)
+      // console.log(this.stepList)
     },
     // 监听 pagesize改变的事件
     handleSizeChange (newSize) {

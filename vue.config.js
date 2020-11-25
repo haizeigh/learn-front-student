@@ -35,5 +35,8 @@ module.exports = {
         return args
       })
     })
+  },
+  devServer: {
+    disableHostCheck: true
   }
 }
