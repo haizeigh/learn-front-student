@@ -10,7 +10,7 @@
     <!-- 卡片视图 -->
     <el-card >
       <el-steps finish-status="success">
-        <el-step v-for="step in stepList" :title="step.stepType" :key="step.id"></el-step>
+        <el-step v-for="step in stepList" :title="step.stepTitle" :key="step.id"></el-step>
       </el-steps>
       <!-- <span class="demonstration" >Click 指示器触发</span> -->
       <el-carousel trigger="click" arrow="always" :autoplay=false :indicator-position="outside" :loop=false @change="carouselChange" height="400px">
@@ -30,7 +30,7 @@
             <el-form-item label="回答" prop="answerFromStudent">
               <el-input v-model="step.contentObject.answerFromStudent" type="textarea" :autosize="{ minRows: 4, maxRows: 10}" style="width: 80%; height: 50%;">{{step.contentObject.answerFromStudent}}</el-input>
             </el-form-item>
-            <el-form-item label="参考答案" >
+            <el-form-item v-if="step.contentObject.diamondCount" label="参考答案" >
               <span>{{step.contentObject.answerFromTeacher}}</span>
             </el-form-item>
             <el-form-item>
@@ -54,7 +54,7 @@
                 <!-- <el-radio label="2">不会</el-radio> -->
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="参考答案" >
+            <el-form-item v-if="step.contentObject.diamondCount > 0" label="参考答案" >
               <span>{{step.contentObject.answerFromTeacher}}</span>
             </el-form-item>
             <el-form-item>
@@ -213,8 +213,10 @@ export default {
         answerFromStudent: step.contentObject.answerFromStudent
       })
       if (res.code !== 200) return this.$message.error(res.message)
-      console.log(res)
-      if (res.data.diamondCount) {
+      // console.log(res)
+      step.contentObject.diamondCount = res.data.diamondCount
+      console.log(step.contentObject)
+      if (res.data.diamondCount && res.data.diamondCount > 0) {
         this.$message.success('提交成功, 获得' + res.data.diamondCount + '颗钻石💎奖励')
       } else {
         this.$message.success('提交成功')
