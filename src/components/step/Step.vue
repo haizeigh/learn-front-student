@@ -102,7 +102,7 @@ export default {
         // 当前页数
         pagenum: 1,
         // 每页显示多少数据
-        pagesize: 5
+        pagesize: 10
       },
       stepList: [],
       totle: 0,

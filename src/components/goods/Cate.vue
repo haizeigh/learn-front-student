@@ -116,7 +116,7 @@ export default {
       queryInfo: {
         type: 3,
         pagenum: 1,
-        pagesize: 5
+        pagesize: 10
       },
       total: 0,
       // 为table指定列的定义

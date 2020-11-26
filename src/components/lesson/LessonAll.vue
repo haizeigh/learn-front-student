@@ -9,16 +9,13 @@
     <!-- 卡片视图 -->
     <el-card>
       <!-- 搜索 添加 -->
-      <el-row :gutter="20">
+      <!-- <el-row :gutter="20">
         <el-col :span="6">
           <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getLessonList">
             <el-button slot="append" icon="el-icon-search" @click="getLessonList"></el-button>
           </el-input>
         </el-col>
-        <!-- <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true">添加用户</el-button>
-        </el-col> -->
-      </el-row>
+      </el-row> -->
       <!-- 用户列表区域 -->
       <el-table :data="campList" border stripe>
         <!-- stripe: 斑马条纹
@@ -79,7 +76,7 @@ export default {
         // 当前页数
         pagenum: 1,
         // 每页显示多少数据
-        pagesize: 5
+        pagesize: 10
       },
       campList: [],
       totle: 0,
