@@ -1,4 +1,5 @@
 module.exports = {
+  publicPath: '/edu',
   chainWebpack: config => {
     // 发布模式
     config.when(process.env.NODE_ENV === 'production', config => {

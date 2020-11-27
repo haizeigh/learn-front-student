@@ -215,7 +215,6 @@ export default {
       if (res.code !== 200) return this.$message.error(res.message)
       // console.log(res)
       step.contentObject.diamondCount = res.data.diamondCount
-      console.log(step.contentObject)
       if (res.data.diamondCount && res.data.diamondCount > 0) {
         this.$message.success('提交成功, 获得' + res.data.diamondCount + '颗钻石💎奖励')
       } else {
