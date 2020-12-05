@@ -1,5 +1,6 @@
 module.exports = {
   publicPath: '/edu',
+  outputDir: '/Users/yulei/software/apache-tomcat-7.0.107/webapps/edu',
   chainWebpack: config => {
     // 发布模式
     config.when(process.env.NODE_ENV === 'production', config => {

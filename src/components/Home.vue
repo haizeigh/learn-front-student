@@ -52,7 +52,7 @@
           <el-menu-item index="/lessonAll" @click="saveNavStatus('/lesson')">
             <template slot="title">
                 <i class="el-icon-reading"></i>
-                <span>全部章节列表</span>
+                <span>全部已选章节列表</span>
             </template>
           </el-menu-item>
 

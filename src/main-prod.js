@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-// import './plugins/element.js'
+import './plugins/element.js'
 // 导入全局样式
 import './assets/css/global.css'
 // 导入字体图标
@@ -11,17 +11,24 @@ import TreeTable from 'vue-table-with-tree-grid'
 // 导入富文本编辑器
 import VueQuillEditor from 'vue-quill-editor'
 // 导入富文本编辑器样式
-// import 'quill/dist/quill.core.css'
-// import 'quill/dist/quill.snow.css'
-// import 'quill/dist/quill.bubble.css'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import './assets/css/common.css'
 
 // 导入NProgress, 包对应的JS和CSS
 import NProgress from 'nprogress'
-// import 'nprogress/nprogress.css'
+import 'nprogress/nprogress.css'
+import vueMiniPlayer from 'vue-mini-player'
+import VideoPlayer from 'vue-video-player'
 
 import axios from 'axios'
 // 配置请求根路径
+// 本机地址
 axios.defaults.baseURL = 'http://3.223.239.209:8086/edu/'
+// 远程后台地址
+// axios.defaults.baseURL = 'https://www.liulongbin.top:8888/api/private/v1/'
+
 // 在request 拦截器中, 展示进度条 NProgress.start()
 // 请求在到达服务器之前，先会调用use中的这个回调函数来添加请求头信息
 axios.interceptors.request.use(config => {
@@ -45,7 +52,12 @@ Vue.config.productionTip = false
 Vue.component('tree-table', TreeTable)
 // 全局注册富文本编辑器
 Vue.use(VueQuillEditor)
-// 全局时间过滤器
+// 使用播放器
+Vue.use(vueMiniPlayer)
+Vue.use(VideoPlayer)
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
+
 Vue.filter('dataFormat', function (originVal) {
   const dt = new Date(originVal)
 
