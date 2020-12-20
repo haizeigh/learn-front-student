@@ -21,7 +21,7 @@ import VueRouter from 'vue-router'
 // 路由懒加载
 const Login = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../components/Login.vue')
 const Home = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../components/Home.vue')
-const Welcome = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../components/Welcome.vue')
+// const Welcome = () => import(/* webpackChunkName: "Login_Home_Welcome" */ '../components/Welcome.vue')
 
 const Users = () => import(/* webpackChunkName: "Users_Rights_Roles" */ '../components/user/User.vue')
 const Rights = () => import(/* webpackChunkName: "Users_Rights_Roles" */ '../components/power/Rights.vue')
@@ -52,9 +52,9 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/home',
     component: Home,
-    redirect: '/Welcome',
+    // redirect: '/Welcome',
     children: [
-      { path: '/home', component: Welcome },
+      { path: '/home', component: StudentCamp },
       { path: '/users', component: Users },
       { path: '/rights', component: Rights },
       { path: '/roles', component: Roles },
