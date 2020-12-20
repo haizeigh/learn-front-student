@@ -25,7 +25,8 @@ import VideoPlayer from 'vue-video-player'
 import axios from 'axios'
 // 配置请求根路径
 // 本机地址
-axios.defaults.baseURL = 'http://127.0.0.1:8086/edu/'
+// axios.defaults.baseURL = 'http://127.0.0.1:8086/edu/'
+axios.defaults.baseURL = 'http://3.223.239.209:8086/edu/'
 // 远程后台地址
 // axios.defaults.baseURL = 'https://www.liulongbin.top:8888/api/private/v1/'
 

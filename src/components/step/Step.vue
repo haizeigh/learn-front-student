@@ -177,7 +177,11 @@ export default {
         fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
         sources: [{
           type: 'video/mp4', // 这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-          src: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4' // url地址
+          type: 'video/x-flv',
+          type: "video/ogg",
+          type:"video/webm",
+          src: 'https://my-file-bucket-test1.s3-us-west-1.amazonaws.com/resource/testvideo.flv' // url地址
+          // src: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4' // url地址
         }],
         // poster: 'https://i.loli.net/2019/06/06/5cf8c5d9c57b510947.png', // 你的封面地址
         // width: document.documentElement.clientWidth, // 播放器宽度
@@ -243,6 +247,19 @@ export default {
       // console.log(JSON.stringify(this.stepList[1].contentObject))
       // console.log(this.playerOptions)
       // console.log(this.stepList)
+
+      // 测试代码
+      // var url = 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4'
+      // // var content = 'url'
+      // var content = '{\'playbackRates\':[0.7,1,1.5,2],\'sources\':[{\'src\':\'url\',\'type\':\'video/mp4\'}],\'loop\':false,\'notSupportedMessage\':\'此视频暂无法播放，请稍后再试\',\'language\':\'zh-CN\',\'aspectRatio\':\'16:9\',\'fluid\':true,\'muted\':false,\'preload\':\'auto\',\'autoplay\':false}'
+      // content = content.replace('url', url)
+      // console.log(content)
+      // const { data: res1 } = await this.$http.post('http://52.0.33.216:8085/eduOps/api/v1//lesson/step', {
+      //   lessonId: 9,
+      //   stepType: '视频观看',
+      //   content: content
+      // })
+      // console.log(res1)
     },
     // 监听 pagesize改变的事件
     handleSizeChange (newSize) {
